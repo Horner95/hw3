@@ -1,31 +1,35 @@
 class EntriesController < ApplicationController
-  
+  def index
+    @entries = Entry.all
+  end
+
   def show
-    @contact = Contact.find_by({"id" => params["id"]})
-    @company = Company.find_by({"id" => @contact["company_id"]})
+    @place = Place.find(params[:id])
+    @entry = Entry.where({"place_id" => @place["id"]})
+  
   
   end
 
   def new
-  
-  end
+    @place = Place.find_by({ "id" => params["place_id"] })
+end
 
   def create
  
-    @place = Place.new
+    @entry = Entry.new
 
-    @place["first_name"] = params["first_name"]
-    @contact["last_name"] = params["last_name"]
-    @contact["email"] = params["email"]
-    @contact["phone_number"] = params["phone_number"]
+    @entry["title"] = params["title"]
+    @entry["description"] = params["description"]
+    @entry["occurred_on"] = params["occurred_on"]
+    @entry["place_id"] = params["place_id"]
 
-  
-    @contact["company_id"] = params["company_id"]
 
-  
-    @contact.save
 
   
-    redirect_to "/companies/#{@contact["company_id"]}"
+    @entry.save
+
+  
+    redirect_to "/places/#{@entry["place_id"]}"
+
   end
 end
